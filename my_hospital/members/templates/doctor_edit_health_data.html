@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <img src="{% static 'assets/img/experts/5.png' %}" alt="Edit Health Data" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';">
+                    <h3>Edit Health Data</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Patient: {{ health_data.patient.user.get_full_name|default:health_data.patient.user.username }}</p>
+                    <p class="text-muted">Date: {{ health_data.date|date:"M d, Y" }}</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_blood_pressure" class="form-label">Blood Pressure</label>
+                                <input type="text" class="form-control" name="blood_pressure" id="id_blood_pressure" 
+                                       value="{{ health_data.blood_pressure }}" placeholder="e.g., 120/80">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_sugar" class="form-label">Sugar (mg/dL)</label>
+                                <input type="text" class="form-control" name="sugar" id="id_sugar" 
+                                       value="{{ health_data.sugar }}" placeholder="e.g., 100">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_pse" class="form-label">PSE (Pulse/SpO2/ECG)</label>
+                                <input type="text" class="form-control" name="pse" id="id_pse" 
+                                       value="{{ health_data.pse }}" placeholder="e.g., 72/98/60">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_weight" class="form-label">Weight (kg)</label>
+                                <input type="text" class="form-control" name="weight" id="id_weight" 
+                                       value="{{ health_data.weight }}" placeholder="e.g., 70">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_notes" class="form-label">Notes</label>
+                            <textarea class="form-control" name="notes" id="id_notes" rows="3">{{ health_data.notes }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Health Data</button>
+                        <a href="{% url 'doctor_patient_health_data' health_data.patient.id %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

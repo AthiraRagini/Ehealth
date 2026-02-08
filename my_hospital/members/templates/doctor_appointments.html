@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center mb-4">
+                {% comment %} <img src="{% static 'assets/img/experts/8.png' %}" alt="Appointments" class="img-fluid mb-3" style="max-height: 120px;" onerror="this.style.display='none';"> {% endcomment %}
+                <h2 class="mb-4">My Appointments</h2>
+            </div>
+            <a href="{% url 'doctor_home' %}" class="btn btn-secondary mb-3">Back to Home</a>
+            
+            {% if appointments %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Payment Status</th>
+                                    <th>Prescription</th>
+                                    <th>Video Call</th>
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in appointments %}
+                                <tr>
+                                    <td>{{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</td>
+                                    <td>{{ appointment.date|date:"M d, Y" }}</td>
+                                    <td>{{ appointment.time|time:"g:i A"|default:"-" }}</td>
+                                    <td>{{ appointment.description|default:"-" }}</td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if appointment.status == 'confirmed' %}bg-success
+                                            {% elif appointment.status == 'pending' %}bg-warning
+                                            {% elif appointment.status == 'completed' %}bg-info
+                                            {% elif appointment.status == 'rejected' %}bg-danger
+                                            {% else %}bg-secondary{% endif %}">
+                                            {{ appointment.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% for payment in appointment.payments.all %}
+                                            <span class="badge {% if payment.status == 'paid' %}bg-success{% else %}bg-warning{% endif %}">
+                                                {{ payment.get_status_display }}
+                                            </span>
+                                            <br><small>₹{{ payment.amount }}</small>
+                                        {% empty %}
+                                            <span class="text-muted">No payment</span>
+                                        {% endfor %}
+                                    </td>
+                                    {% comment %} <td>
+    {% if appointment.status == 'confirmed' %}
+        <a href="{% url 'doctor_add_prescription' appointment.id %}"
+           class="btn btn-sm btn-outline-primary">
+            Add / View
+        </a>
+    {% else %}
+        <span class="text-muted">—</span>
+    {% endif %}
+</td> {% endcomment %}
+<td>
+    {% if appointment.status == 'confirmed' %}
+        <a href="{% url 'doctor_add_prescription' appointment.id %}"
+           class="btn btn-sm btn-outline-primary">
+            {% if appointment.prescription %}
+                View / Edit
+            {% else %}
+                Add
+            {% endif %}
+        </a>
+    {% else %}
+        <span class="text-muted">—</span>
+    {% endif %}
+</td>
+<td>
+    {% if appointment.status == 'confirmed' and appointment.is_paid %}
+        <a href="{% url 'doctor_video_call' appointment.id %}"
+           class="btn btn-sm btn-outline-success">
+            Join
+        </a>
+    {% else %}
+        <span class="text-muted">—</span>
+    {% endif %}
+</td>
+
+
+
+
+        <td>
+        <a href="{% url 'doctor_patient_health_data' appointment.patient.id %}" class="btn btn-sm btn-primary">View Health</a>
+                 {% if appointment.status == 'pending' %}
+                     <form method="post" action="{% url 'doctor_accept_appointment' appointment.id %}" style="display:inline;">
+                         {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                                </form>
+                                 <form method="post" action="{% url 'doctor_reject_appointment' appointment.id %}" style="display:inline;margin-left:6px;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <p>No appointments yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

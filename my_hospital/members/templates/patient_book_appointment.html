@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center mb-4">
+                {% comment %} <img src="{% static 'assets/img/experts/3.png' %}" alt="Book Appointment" class="img-fluid mb-3" style="max-height: 120px;" onerror="this.style.display='none';"> {% endcomment %}
+                <h2 class="mb-4">Book an Appointment</h2>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Filter Doctors by Department/Specialization</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="specialization" class="form-label">Department/Specialization</label>
+                            <select class="form-select" name="specialization" id="specialization" onchange="this.form.submit()">
+                                <option value="">All Departments</option>
+                                {% for spec in all_specializations %}
+                                <option value="{{ spec }}" {% if selected_specialization == spec %}selected{% endif %}>
+                                    {{ spec }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="search" class="form-label">Search Doctor Name or Specialization</label>
+                            <input type="text" class="form-control" name="search" id="search" 
+                                   value="{{ search_query }}" placeholder="Search...">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                        </div>
+                        {% if selected_specialization or search_query %}
+                        <div class="col-md-12">
+                            <a href="{% url 'patient_book_appointment' %}" class="btn btn-sm btn-outline-secondary">Clear Filters</a>
+                        </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Appointment Booking Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Select Doctor and Book Appointment</h3>
+                </div>
+                <div class="card-body">
+                    {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    
+                    {% if selected_specialization %}
+                    <div class="alert alert-info">
+                        <strong>Filtered by:</strong> {{ selected_specialization }}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="doctor" class="form-label">Select Doctor</label>
+                            {% if doctors %}
+                            <select class="form-select" name="doctor" id="doctor" required>
+                                <option value="">Choose a doctor...</option>
+                                {% for doctor in doctors %}
+                                <option value="{{ doctor.id }}" data-fee="{{ doctor.fee }}">
+                                    Dr. {{ doctor.user.get_full_name|default:doctor.user.username }} 
+                                    {% if doctor.specialization %}- {{ doctor.specialization }}{% endif %} 
+                                    {% if doctor.phone %}({{ doctor.phone }}){% endif %}
+                                    - Fee: ₹{{ doctor.fee|default:"0.00" }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-text text-muted">
+                                Found {{ doctors|length }} doctor{{ doctors|length|pluralize }}
+                                {% if selected_specialization %}in {{ selected_specialization }}{% endif %}
+                            </small>
+                            {% else %}
+                            <select class="form-select" name="doctor" id="doctor" required disabled>
+                                <option value="">
+                                    {% if selected_specialization %}
+                                        No doctors found in {{ selected_specialization }}
+                                    {% else %}
+                                        No doctors available. Please contact admin.
+                                    {% endif %}
+                                </option>
+                            </select>
+                            <div class="alert alert-warning mt-2">
+                                <strong>No doctors found!</strong>
+                                {% if selected_specialization %}
+                                    Try selecting a different department or <a href="{% url 'patient_book_appointment' %}">view all doctors</a>.
+                                {% else %}
+                                    Please register a doctor first or contact the administrator.
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" name="date" id="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="time" class="form-label">Time</label>
+                            <input type="time" class="form-control" name="time" id="time" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <textarea class="form-control" name="description" id="description" rows="3" placeholder="Brief description of your concern"></textarea>
+                        </div>
+                        <div class="alert alert-info">
+                            <strong>Note:</strong> You will be redirected to payment after booking.
+                        </div>
+                        <button type="submit" class="btn btn-primary" {% if not doctors %}disabled{% endif %}>Book Appointment</button>
+                        <a href="{% url 'patient_home' %}" class="btn btn-secondary">Cancel</a>
+                        <a href="{% url 'department' %}" class="btn btn-outline-info">View All Departments</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').setAttribute('min', today);
+});
+</script>
+{% endblock %}

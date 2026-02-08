@@ -1,0 +1,584 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="doctor-header-card p-4 rounded-4 shadow-sm border-0" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        {% comment %} <div class="doctor-avatar-wrapper mb-3 mb-md-0">
+                            <img src="{% static 'assets/img/experts/6.png' %}" alt="Doctor" class="img-fluid rounded-circle border border-4 border-white shadow" style="max-height: 140px; width: 140px; object-fit: cover;" onerror="this.onerror=null; this.src='{% static 'assets/img/default-doctor.png' %}'">
+                        </div> {% endcomment %}
+                    </div>
+                    <div class="col-md-8">
+                        <h1 class="text-white mb-2">Welcome, Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h1>
+                        <p class="text-light mb-2"><i class="fas fa-stethoscope me-2"></i>{{ doctor.specialization|default:"General Medicine" }}</p>
+                        {% if doctor.hospital %}
+                        <p class="text-light mb-0"><i class="fas fa-hospital me-2"></i>{{ doctor.hospital }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2 text-end">
+     <a href="{% url 'doctor_profile_edit' %}" style="background:white;color:blue;border-radius:20px;padding:10px;z-index:999;position:relative;">
+    EDIT PROFILE 
+</a>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="stats-card card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="stats-icon-wrapper me-3" style="background-color: rgba(25, 135, 84, 0.1);">
+                            <i class="fas fa-user-injured" style="color: #198754; font-size: 1.8rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">My Patients</h6>
+                            <h2 class="mb-0">{{ assigned_patients.count }}</h2>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-4">Patients currently under your care</p>
+                    <a href="{% url 'doctor_patients' %}" class="btn btn-success w-100 rounded-pill">
+                        <i class="fas fa-users me-2"></i>View All Patients
+                    </a>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-3" style="background-color: rgba(25, 135, 84, 0.05);">
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted">This Month</span>
+                        <span class="text-success fw-bold">+12%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="stats-card card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="stats-icon-wrapper me-3" style="background-color: rgba(13, 110, 253, 0.1);">
+                            <i class="fas fa-calendar-check" style="color: #0d6efd; font-size: 1.8rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">Appointments</h6>
+                            <h2 class="mb-0">{{ appointments.count }}</h2>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-4">Scheduled consultations and visits</p>
+                    <a href="{% url 'doctor_appointments' %}" class="btn btn-primary w-100 rounded-pill">
+                        <i class="fas fa-calendar-alt me-2"></i>Manage Appointments
+                    </a>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-3" style="background-color: rgba(13, 110, 253, 0.05);">
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted">Pending: {{ appointments_pending|default:"0" }}</span>
+                        <span class="text-primary fw-bold">Today: {{ appointments_today|default:"0" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% comment %} <div class="col-md-4 mb-4">
+            <div class="stats-card card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="stats-icon-wrapper me-3" style="background-color: rgba(255, 193, 7, 0.1);">
+                            <i class="fas fa-rupee-sign" style="color: #ffc107; font-size: 1.8rem;"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-uppercase text-muted mb-0">Consultation Fee</h6>
+                            <h2 class="mb-0">₹{{ doctor.fee|default:"0.00" }}</h2>
+                        </div>
+                    </div>
+                    <p class="text-muted mb-4">Per consultation</p>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-warning rounded-pill" data-bs-toggle="modal" data-bs-target="#feeModal">
+                            <i class="fas fa-edit me-2"></i>Update Fee
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0 py-3" style="background-color: rgba(255, 193, 7, 0.05);">
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted">Last updated</span>
+                        <span class="text-warning fw-bold">2 weeks ago</span>
+                    </div>
+                </div>
+            </div>
+        </div> {% endcomment %}
+    </div>
+    
+    <!-- Recent Appointments -->
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-0 py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="fas fa-calendar-day me-2 text-primary"></i>Recent Appointments</h4>
+                        <span class="badge bg-primary rounded-pill px-3 py-2">{{ appointments.count }} Total</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if appointments %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Patient</th>
+                                    <th>Date & Time</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for appointment in appointments|slice:":10" %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="patient-avatar-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #e3f2fd;">
+                                                    <i class="fas fa-user text-primary"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0">{{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</h6>
+                                                <small class="text-muted">ID: PAT{{ appointment.patient.id|stringformat:"04d" }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold">{{ appointment.date|date:"M d, Y" }}</div>
+                                        <div class="text-muted small">{{ appointment.time|time:"g:i A"|default:"-" }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="text-truncate d-inline-block" style="max-width: 150px;">
+                                            {{ appointment.reason|default:"General Checkup"|truncatechars:30 }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge rounded-pill py-2 px-3 
+                                            {% if appointment.status == 'confirmed' %}bg-success
+                                            {% elif appointment.status == 'pending' %}bg-warning
+                                            {% elif appointment.status == 'completed' %}bg-info
+                                            {% elif appointment.status == 'rejected' %}bg-danger
+                                            {% else %}bg-secondary{% endif %}">
+                                            <i class="fas fa-circle me-1 small"></i>
+                                            {{ appointment.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url 'doctor_patient_health_data' appointment.patient.id %}" class="btn btn-sm btn-outline-primary rounded-start-pill">
+                                                <i class="fas fa-heartbeat me-1"></i>Health
+                                            </a>
+                                            {% if appointment.status == 'pending' %}
+                                            <form method="post" action="{% url 'doctor_accept_appointment' appointment.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success rounded-0">
+                                                    <i class="fas fa-check me-1"></i>Accept
+                                                </button>
+                                            </form>
+                                            <form method="post" action="{% url 'doctor_reject_appointment' appointment.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger rounded-end-pill">
+                                                    <i class="fas fa-times me-1"></i>Reject
+                                                </button>
+                                            </form>
+                                            {% else %}
+                                            <a href="#" class="btn btn-sm btn-outline-secondary rounded-end-pill">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer bg-white border-0 py-4 text-center">
+                        <a href="{% url 'doctor_appointments' %}" class="btn btn-primary rounded-pill px-5">
+                            <i class="fas fa-list me-2"></i>View All Appointments
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <div class="empty-state-icon mb-4">
+                            <i class="fas fa-calendar-times text-muted" style="font-size: 4rem;"></i>
+                        </div>
+                        <h4 class="text-muted mb-3">No Appointments Yet</h4>
+                        <p class="text-muted mb-4">You don't have any appointments scheduled at the moment.</p>
+                        <a href="#" class="btn btn-outline-primary rounded-pill">
+                            <i class="fas fa-bell me-2"></i>Set Availability
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Your Patients -->
+    {% if assigned_patients %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-0 py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0"><i class="fas fa-user-friends me-2 text-info"></i>Your Patients</h4>
+                        <span class="badge bg-info rounded-pill px-3 py-2">{{ assigned_patients.count }} Total</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for patient in assigned_patients|slice:":6" %}
+                        <div class="col-md-4 mb-4">
+                            <div class="patient-card card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                                <div class="card-body p-4">
+                                    <div class="text-center mb-4">
+                                        <div class="patient-avatar mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background-color: #e3f2fd;">
+                                            <i class="fas fa-user text-primary" style="font-size: 2.5rem;"></i>
+                                        </div>
+                                        <h5 class="mb-1">{{ patient.user.get_full_name|default:patient.user.username }}</h5>
+                                        <p class="text-muted small mb-3">ID: PAT{{ patient.id|stringformat:"04d" }}</p>
+                                    </div>
+                                    
+                                    <div class="patient-info mb-4">
+                                        {% if patient.age %}
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-birthday-cake text-muted me-2" style="width: 20px;"></i>
+                                            <span>Age: {{ patient.age }} years</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if patient.phone %}
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-phone text-muted me-2" style="width: 20px;"></i>
+                                            <span>{{ patient.phone }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if patient.blood_group %}
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-tint text-danger me-2" style="width: 20px;"></i>
+                                            <span>Blood: {{ patient.blood_group }}</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'doctor_patient_health_data' patient.id %}" class="btn btn-primary rounded-pill">
+                                            <i class="fas fa-chart-line me-2"></i>View Health Data
+                                        </a>
+                                        <a href="#" class="btn btn-outline-secondary rounded-pill">
+                                            <i class="fas fa-comment-medical me-2"></i>Send Message
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-transparent border-0 pt-0 pb-4 text-center">
+                                    <span class="badge bg-info rounded-pill px-3 py-2">
+                                        <i class="fas fa-user-md me-1"></i>Assigned to you
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if assigned_patients.count > 6 %}
+                    <div class="text-center mt-4">
+                        <a href="{% url 'doctor_patients' %}" class="btn btn-info rounded-pill px-5">
+                            <i class="fas fa-users me-2"></i>View All {{ assigned_patients.count }} Patients
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Fee Update Modal -->
+<div class="modal fade" id="feeModal" tabindex="-1" aria-labelledby="feeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title" id="feeModalLabel">Update Consultation Fee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="newFee" class="form-label">New Fee Amount (₹)</label>
+                        <input type="number" class="form-control form-control-lg rounded-pill" id="newFee" placeholder="Enter amount" value="{{ doctor.fee|default:'0' }}">
+                        <div class="form-text">This will be your per consultation fee for new appointments.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning rounded-pill px-4">Update Fee</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .doctor-header-card {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .doctor-header-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+        border-radius: 50%;
+    }
+    
+    .doctor-avatar-wrapper img {
+        border: 4px solid white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .stats-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-top: 4px solid transparent;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .stats-icon-wrapper {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .patient-card {
+        transition: all 0.3s ease;
+    }
+    
+    .patient-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .patient-avatar, .patient-avatar-sm {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid white;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+    
+    .btn-rounded {
+        border-radius: 50px;
+    }
+    
+    .empty-state-icon {
+        opacity: 0.3;
+    }
+    
+    .badge {
+        font-weight: 500;
+    }
+    
+    .card {
+        border: none;
+    }
+    
+    .card-header {
+        font-weight: 600;
+    }
+    
+    @media (max-width: 768px) {
+        .doctor-header-card .row {
+            text-align: center;
+        }
+        
+        .doctor-header-card .col-md-2.text-end {
+            text-align: center !important;
+            margin-top: 20px;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .btn-group .btn {
+            border-radius: 50px !important;
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center mb-4">
+                <img src="{% static 'assets/img/experts/6.png' %}" alt="Doctor" class="img-fluid mb-3" style="max-height: 150px;" onerror="this.style.display='none';">
+                <h2 class="mb-4">Welcome, Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h2>
+                <p class="mb-4">Specialization: {{ doctor.specialization|default:"General Medicine" }}</p>
+                <a href="{% url 'doctor_profile_edit' %}" class="btn btn-sm btn-outline-secondary">Edit Profile</a>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <img src="{% static 'assets/img/experts/7.png' %}" alt="Patients" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';">
+                            <h5>My Patients</h5>
+                            <h3>{{ assigned_patients.count }}</h3>
+                            <a href="{% url 'doctor_patients' %}" class="btn btn-primary">View Patients</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <img src="{% static 'assets/img/experts/8.png' %}" alt="Appointments" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';">
+                            <h5>Appointments</h5>
+                            <h3>{{ appointments.count }}</h3>
+                            <a href="{% url 'doctor_appointments' %}" class="btn btn-success">View Appointments</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <img src="{% static 'assets/img/experts/9.png' %}" alt="Fee" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';">
+                            <h5>Consultation Fee</h5>
+                            <h3>₹{{ doctor.fee|default:"0.00" }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Recent Appointments</h4>
+                </div>
+                        <div class="card-body">
+                    {% if appointments %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments|slice:":10" %}
+                            <tr>
+                                <td>{{ appointment.patient.user.get_full_name|default:appointment.patient.user.username }}</td>
+                                <td>{{ appointment.date|date:"M d, Y" }}</td>
+                                <td>{{ appointment.time|time:"g:i A"|default:"-" }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if appointment.status == 'confirmed' %}bg-success
+                                        {% elif appointment.status == 'pending' %}bg-warning
+                                        {% elif appointment.status == 'completed' %}bg-info
+                                        {% elif appointment.status == 'rejected' %}bg-danger
+                                        {% else %}bg-secondary{% endif %}">
+                                        {{ appointment.get_status_display }}
+                                    </span>
+                                </td>
+                                    <td>
+                                    <a href="{% url 'doctor_patient_health_data' appointment.patient.id %}" class="btn btn-sm btn-primary">View Health</a>
+                                    {% if appointment.status == 'pending' %}
+                                    <form method="post" action="{% url 'doctor_accept_appointment' appointment.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                                    </form>
+                                    <form method="post" action="{% url 'doctor_reject_appointment' appointment.id %}" style="display:inline;margin-left:6px;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'doctor_appointments' %}" class="btn btn-primary">View All Appointments</a>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No appointments yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if assigned_patients %}
+            <div class="card">
+                <div class="card-header">
+                    <h4>Your Patients</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for patient in assigned_patients|slice:":6" %}
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <img src="{% static 'assets/img/experts/2.png' %}" alt="Patient" class="img-fluid mb-2" style="max-height: 60px;" onerror="this.style.display='none';">
+                                    <h6>{{ patient.user.get_full_name|default:patient.user.username }}</h6>
+                                    {% if patient.age %}<p class="small">Age: {{ patient.age }}</p>{% endif %}
+                                    {% if patient.phone %}<p class="small">Phone: {{ patient.phone }}</p>{% endif %}
+                                    <span class="badge bg-info ms-2">Assigned</span>
+                                    <a href="{% url 'doctor_patient_health_data' patient.id %}" class="btn btn-sm btn-primary">View Health Data</a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if assigned_patients.count > 6 %}
+                    <div class="text-center mt-3">
+                        <a href="{% url 'doctor_patients' %}" class="btn btn-info">View All {{ assigned_patients.count }} Patients</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %} {% endcomment %}

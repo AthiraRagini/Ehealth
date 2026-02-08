@@ -1,0 +1,128 @@
+{% load static %}
+
+<div class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-header d-flex align-items-center gap-3">
+        <div style="width:48px; height:48px; border-radius:8px; overflow:hidden; background:#fff; display:flex; align-items:center; justify-content:center;">
+            <img src="{% static 'assets/img/avatar-placeholder.png' %}" alt="avatar" style="width:44px;height:44px; object-fit:cover;" onerror="this.style.display='none'">
+        </div>
+        <div>
+            <h4 style="margin:0; font-size:1rem;">Admin Panel</h4>
+            <div class="text-muted" style="font-size:0.85rem">{{ user.username }}</div>
+        </div>
+        <div class="ms-auto d-none d-lg-block">
+            <button id="sidebarToggle" class="btn btn-sm btn-light" title="Toggle Sidebar">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <ul class="list-unstyled admin-nav">
+
+      
+        <li>
+            <a href="{% url 'admin_home' %}" 
+               class="nav-link{% if request.resolver_match.url_name == 'admin_home' %} active{% endif %}">
+               <i class="fa fa-tachometer me-2"></i>
+               <span class="link-label">Custom Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            {% with current=request.resolver_match.url_name %}
+            {% with active=(current == 'admin_doctors' or current == 'admin_patients') %}
+
+            <a class="nav-link d-flex justify-content-between align-items-center{% if active %} active{% endif %}"
+               data-bs-toggle="collapse"
+               href="#manageUsersSubmenu"
+               role="button"
+               aria-expanded="{{ active|yesno:'true,false' }}"
+               aria-controls="manageUsersSubmenu">
+
+                <span>
+                    <i class="fa fa-users me-2"></i>
+                    <span class="link-label">Users</span>
+                </span>
+
+                <i class="fa fa-chevron-down"></i>
+            </a>
+
+            <div class="collapse{% if active %} show{% endif %}" id="manageUsersSubmenu">
+                <ul class="list-unstyled ms-3">
+
+                    <li>
+                        <a href="{% url 'admin_doctors' %}" 
+                           class="nav-link{% if current == 'admin_doctors' %} active{% endif %}">
+                            Doctor List
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'admin_patients' %}" 
+                           class="nav-link{% if current == 'admin_patients' %} active{% endif %}">
+                            Patient List
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            {% endwith %}
+            {% endwith %}
+        </li>
+
+       
+        <li>
+            <a href="{% url 'admin_appointments' %}" 
+               class="nav-link{% if request.resolver_match.url_name == 'admin_appointments' %} active{% endif %}">
+               <i class="fa fa-calendar me-2"></i>
+               <span class="link-label">
+                   Appointments 
+                   {% if admin_pending_appointments %}
+                       <span class="badge bg-danger ms-2">{{ admin_pending_appointments }}</span>
+                   {% endif %}
+               </span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'admin_payments' %}" 
+               class="nav-link{% if request.resolver_match.url_name == 'admin_payments' %} active{% endif %}">
+               <i class="fa fa-money me-2"></i>
+               <span class="link-label">
+                   Payments 
+                   {% if admin_pending_payments %}
+                       <span class="badge bg-warning ms-2">{{ admin_pending_payments }}</span>
+                   {% endif %}
+               </span>
+            </a>
+        </li>
+
+      
+        <li>
+            <a href="{% url 'logout' %}" class="nav-link">
+                <i class="fa fa-sign-out me-2"></i> Logout
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+<script>
+(function(){
+    function toggle(){
+        var s = document.getElementById('adminSidebar');
+        var m = document.querySelector('.main-content');
+        if(!s || !m) return;
+        s.classList.toggle('collapsed');
+        m.classList.toggle('collapsed');
+        try { localStorage.setItem('adminSidebarCollapsed', s.classList.contains('collapsed') ? '1' : '0'); } catch(e) {}
+    }
+    var btn = document.getElementById('sidebarToggle');
+    if(btn) btn.addEventListener('click', toggle);
+
+    try{
+        var state = localStorage.getItem('adminSidebarCollapsed');
+        if(state === '1'){ document.addEventListener('DOMContentLoaded', toggle); }
+    } catch(e){}
+})();
+</script>

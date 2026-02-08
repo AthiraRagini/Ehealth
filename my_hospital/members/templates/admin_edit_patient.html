@@ -1,0 +1,14 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-content">
+    <h2>Edit Patient: {{ patient.user.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{% url 'admin_users' %}" class="btn btn-secondary">Back to Users</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo Payment | HMS</title>
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: Arial;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .payment-box {
+            width: 350px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #0b5ed7;
+        }
+        #otpBox {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="payment-box">
+    <h3 style="text-align:center;">Payment Gateway (Demo)</h3>
+
+    <div id="cardBox">
+        <input type="text" placeholder="Card Number" id="cardNumber" maxlength="16">
+        <input type="text" placeholder="Card Holder Name" id="cardName">
+        <input type="text" placeholder="Expiry (MM/YY)" id="expiry" maxlength="5">
+        <input type="password" placeholder="CVV" id="cvv" maxlength="3">
+        <button class="btn" onclick="sendOTP()">Pay ₹500</button>
+    </div>
+
+    <div id="otpBox">
+        <h4>Enter OTP</h4>
+        <input type="text" id="otpInput" maxlength="6" placeholder="XXXXXX">
+        <button class="btn" onclick="verifyOTP()">Verify</button>
+    </div>
+</div>
+
+<script>
+function sendOTP() {
+    // SIMPLE FRONTEND VALIDATION
+    let card = document.getElementById("cardNumber").value;
+    let cvv = document.getElementById("cvv").value;
+
+    if (card.length != 16 || cvv.length != 3) {
+        alert("Invalid card details!");
+        return;
+    }
+
+    // OTP SCREEN
+    document.getElementById("cardBox").style.display = "none";
+    document.getElementById("otpBox").style.display = "block";
+
+    // Demo OTP
+    alert("Your OTP is: 123456 (Demo)");
+}
+
+function verifyOTP() {
+    let otp = document.getElementById("otpInput").value;
+
+    if (otp == "123456") {
+        alert("Payment Successful!");
+        window.location.href = "/payment-success/";  // Django route
+    } else {
+        alert("Invalid OTP!");
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+_pycache_/
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+venv/
+env/
+desktop.ini

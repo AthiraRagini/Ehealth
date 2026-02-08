@@ -1,0 +1,24 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% include 'includes/admin_sidebar.html' %}
+<div class="main-content">
+    <h2>Edit User: {{ user_obj.username }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        {% if patient_form %}
+            <h4>Patient Information</h4>
+            {{ patient_form.as_p }}
+        {% endif %}
+        {% if doctor_form %}
+            <h4>Doctor Information</h4>
+            {{ doctor_form.as_p }}
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'admin_users' %}" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}

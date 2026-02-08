@@ -1,0 +1,14 @@
+{% extends 'admin_base.html' %}
+
+{% load static %}
+
+{% block content %}
+{% if user.is_staff %}
+
+{% endif %}
+<div class="main-content">
+    {% include 'includes/admin_dashboard.html' %}
+</div>
+
+{% endblock %}
+

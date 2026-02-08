@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center mb-4">
+                {% comment %} <img src="{% static 'assets/img/experts/1.png' %}" alt="Patient" class="img-fluid mb-3" style="max-height: 150px;" onerror="this.style.display='none';"> {% endcomment %}
+                <h2>Welcome, {{ patient.user.get_full_name|default:patient.user.username }}</h2>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            {% comment %} <img src="{% static 'assets/img/experts/2.png' %}" alt="Health Data" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';"> {% endcomment %}
+                            <h5 class="card-title">Health Data</h5>
+                            <p class="card-text">View and add your health records</p>
+                            <a href="{% url 'patient_health_data' %}" class="btn btn-primary">Manage Health Data</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            {% comment %} <img src="{% static 'assets/img/department/1.jpg' %}" alt="Departments" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';"> {% endcomment %}
+                            <h5 class="card-title">Departments</h5>
+                            <p class="card-text">Browse by specialization</p>
+                            <a href="{% url 'department' %}" class="btn btn-warning">View Departments</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            {% comment %} <img src="{% static 'assets/img/experts/3.png' %}" alt="Appointment" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';"> {% endcomment %}
+                            <h5 class="card-title">Book Appointment</h5>
+                            <p class="card-text">Schedule an appointment with a doctor</p>
+                            <a href="{% url 'patient_book_appointment' %}" class="btn btn-success">Book Appointment</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            {% comment %} <img src="{% static 'assets/img/experts/4.png' %}" alt="Appointments" class="img-fluid mb-2" style="max-height: 80px;" onerror="this.style.display='none';"> {% endcomment %}
+                            <h5 class="card-title">My Appointments</h5>
+                            <p class="card-text">View your appointment history</p>
+                            <a href="{% url 'patient_my_appointments' %}" class="btn btn-info">View Appointments</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if patient.assigned_doctor %}
+            <div class="alert alert-success">
+                <strong>Your Doctor:</strong> Dr. {{ patient.assigned_doctor.user.get_full_name|default:patient.assigned_doctor.user.username }} 
+                - {{ patient.assigned_doctor.specialization }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

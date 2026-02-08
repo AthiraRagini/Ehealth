@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="doctor_register py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <!-- Left Content -->
+                <div class="pe-lg-5 mb-5 mb-lg-0">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle bg-light mb-3">
+                            <i class="fas fa-heartbeat fa-2x text-primary"></i>
+                        </div>
+                        <h1 class="display-6 fw-bold mb-3">Join Our Medical Community</h1>
+                        <p class="lead text-muted mb-4">
+                            Register as a healthcare professional to access our platform and provide quality care to patients.
+                        </p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-check text-success mt-1 me-3"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1">Secure Platform</h6>
+                                    <p class="text-muted small mb-0">HIPAA compliant data security</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-check text-success mt-1 me-3"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1">Easy Scheduling</h6>
+                                    <p class="text-muted small mb-0">Manage appointments efficiently</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-check text-success mt-1 me-3"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1">Patient Records</h6>
+                                    <p class="text-muted small mb-0">Access comprehensive records</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-check text-success mt-1 me-3"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1">24/7 Support</h6>
+                                    <p class="text-muted small mb-0">Technical assistance anytime</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <!-- Registration Form -->
+                <div class="bg-white p-4 p-lg-5 rounded-3 shadow-sm">
+                    <div class="mb-4">
+                        <h3 class="fw-bold mb-1">Doctor Registration</h3>
+                        <p class="text-muted">Create your account in 2 minutes</p>
+                    </div>
+                    
+                    {% if error %}
+                    <div class="alert alert-light border border-danger text-danger mb-4" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ error }}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- User Form -->
+                        <div class="row g-3 mb-4">
+                            <h6 class="text-uppercase text-muted fw-semibold mb-3">Personal Details</h6>
+                            {% for field in user_form %}
+                            <div class="col-md-6">
+                                <label for="{{ field.id_for_label }}" class="form-label small fw-semibold text-muted mb-2">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ field.errors|join:", " }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Doctor Form -->
+                        <div class="row g-3 mb-4">
+                            <h6 class="text-uppercase text-muted fw-semibold mb-3">Professional Details</h6>
+                            {% for field in doctor_form %}
+                            <div class="col-md-6">
+                                <label for="{{ field.id_for_label }}" class="form-label small fw-semibold text-muted mb-2">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ field.errors|join:", " }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Submit -->
+                        <div class="mt-4 pt-2">
+                            <button type="submit" class="btn btn-primary w-100 py-3">
+                                Create Professional Account
+                            </button>
+                        </div>
+                        
+                        <!-- Login Link -->
+                        <div class="text-center mt-4">
+                            <p class="text-muted small">
+                                Already have an account? 
+                                <a href="{% url 'doctor_login' %}" class="fw-semibold text-decoration-none">
+                                    Sign in here
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Overall Layout */
+    .doctor_register {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+    
+    /* Form Elements */
+    .form-control, .form-select {
+        border: none;
+        border-bottom: 2px solid #e2e8f0;
+        border-radius: 0;
+        padding: 10px 0;
+        background: transparent;
+        font-size: 15px;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-bottom-color: #3b82f6;
+        box-shadow: none;
+        background: transparent;
+    }
+    
+    /* Labels */
+    .form-label {
+        color: #64748b;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Button */
+    .btn-primary {
+        background: #3b82f6;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+        background: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Card */
+    .rounded-3 {
+        border-radius: 16px !important;
+    }
+    
+    /* Section Headers */
+    h6.text-uppercase {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    
+    /* Left Content */
+    .bg-light {
+        background-color: #f1f5f9 !important;
+    }
+    
+    /* Alert */
+    .alert-light {
+        background-color: #fef2f2;
+        border-radius: 8px;
+    }
+    
+    /* Validation */
+    .was-validated .form-control:valid {
+        border-bottom-color: #10b981;
+    }
+    
+    .was-validated .form-control:invalid {
+        border-bottom-color: #ef4444;
+    }
+    
+    .invalid-feedback {
+        font-size: 12px;
+        margin-top: 4px;
+    }
+    
+    /* Animation */
+    @keyframes floatIn {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .bg-white {
+        animation: floatIn 0.5s ease-out;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+        .pe-lg-5 {
+            padding-right: 0 !important;
+        }
+        
+        .min-vh-100 {
+            min-height: auto !important;
+        }
+    }
+    
+    /* Hover Effects for Benefits */
+    .col-6 .d-flex {
+        padding: 8px;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+    
+    .col-6 .d-flex:hover {
+        background: rgba(59, 130, 246, 0.05);
+    }
+    
+    /* Clean Shadow */
+    .shadow-sm {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    }
+</style>
+
+<script>
+    // Form Validation Enhancement
+    document.addEventListener('DOMContentLoaded', function() {
+        // Style all form inputs
+        document.querySelectorAll('input, select').forEach(field => {
+            field.classList.add('form-control');
+            field.style.padding = '10px 0';
+            field.style.borderRadius = '0';
+            field.style.border = 'none';
+            field.style.borderBottom = '2px solid #e2e8f0';
+            field.style.background = 'transparent';
+            
+            if (field.tagName === 'SELECT') {
+                field.classList.add('form-select');
+            }
+        });
+        
+        // Add focus effects
+        document.querySelectorAll('.form-control, .form-select').forEach(field => {
+            field.addEventListener('focus', function() {
+                this.style.borderBottomColor = '#3b82f6';
+                this.style.boxShadow = 'none';
+            });
+            
+            field.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.style.borderBottomColor = '#e2e8f0';
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="doctor_register">
+    <div class="container">
+        <h2 class="text-center">Doctor Registration</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+            {{ user_form.as_p }}
+            {{ doctor_form.as_p }}
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+        <p class="text-center">Already have an account? <a href="{% url 'doctor_login' %}">Login here</a></p>
+    </div>
+</section>
+
+{% endblock %} {% endcomment %}

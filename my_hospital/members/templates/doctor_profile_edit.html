@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Header Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-edit fa-3x text-primary mb-3"></i>
+                        <h2 class="card-title h3 mb-2">Edit Your Profile</h2>
+                        <p class="text-muted">Update your personal information below</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <form method="post" class="profile-edit-form">
+                        {% csrf_token %}
+                        
+                        <!-- Form Fields with Better Styling -->
+                        <div class="row">
+                            {% for field in form %}
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                                        {{ field.label }}
+                                        {% if field.field.required %}
+                                            <span class="text-danger">*</span>
+                                        {% endif %}
+                                    </label>
+                                    
+                                    <!-- Input Field Styling -->
+                                    {% if field.field.widget.input_type == 'checkbox' %}
+                                        <div class="form-check">
+                                            {{ field }}
+                                            <label class="form-check-label" for="{{ field.id_for_label }}">
+                                                {{ field.label }}
+                                            </label>
+                                        </div>
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+                                    
+                                    <!-- Field Help Text -->
+                                    {% if field.help_text %}
+                                        <div class="form-text small text-muted mt-1">
+                                            <i class="fas fa-info-circle me-1"></i>{{ field.help_text }}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <!-- Field Errors -->
+                                    {% if field.errors %}
+                                        <div class="alert alert-danger small mt-2 p-2">
+                                            {% for error in field.errors %}
+                                                <div><i class="fas fa-exclamation-circle me-1"></i>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                        </div>
+                        
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <a href="#" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                                <i class="fas fa-save me-2"></i>Save Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Additional Help Text -->
+            <div class="mt-4 text-center">
+                <p class="text-muted small">
+                    <i class="fas fa-shield-alt me-1"></i>
+                    Your information is secure and will not be shared with third parties.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Form Styling */
+    .profile-edit-form input:not([type="checkbox"]),
+    .profile-edit-form textarea,
+    .profile-edit-form select {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #333;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-edit-form input:focus,
+    .profile-edit-form textarea:focus,
+    .profile-edit-form select:focus {
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        outline: 0;
+    }
+    
+    /* Checkbox Styling */
+    .profile-edit-form .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        margin-top: 0.25rem;
+    }
+    
+    .profile-edit-form .form-check-label {
+        margin-left: 8px;
+        font-weight: 500;
+    }
+    
+    /* Card Styling */
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    /* Button Styling */
+    .btn-primary {
+        background: linear-gradient(135deg, #4a90e2 0%, #3a7bd5 100%);
+        border: none;
+        padding: 12px 28px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #3a7bd5 0%, #2a5bb5 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(58, 123, 213, 0.2);
+    }
+    
+    .btn-outline-secondary {
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 24px !important;
+        }
+        
+        .d-flex {
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+    
+    /* Form Label Styling */
+    .form-label {
+        font-size: 15px;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    /* Icon Styling */
+    .fa-user-edit {
+        background: linear-gradient(135deg, #4a90e2, #3a7bd5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+</style>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<script>
+    // Add form validation and interactions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add Bootstrap classes to form inputs
+        const formInputs = document.querySelectorAll('.profile-edit-form input, .profile-edit-form textarea, .profile-edit-form select');
+        formInputs.forEach(input => {
+            if (input.type !== 'checkbox') {
+                input.classList.add('form-control');
+            }
+        });
+        
+        // Add focus effects
+        formInputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+        
+        // Form submission feedback
+        const form = document.querySelector('.profile-edit-form');
+        form.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            submitBtn.disabled = true;
+            
+            // In a real application, this would be handled by the form submission
+            // For demo purposes, revert after 2 seconds
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

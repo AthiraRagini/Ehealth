@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Appointment with Dr. {{ appointment.doctor.user.get_full_name }}</h2>
+<p>Date: {{ appointment.date }} | Time: {{ appointment.time }}</p>
+
+<a href="{{ join_url }}" target="_blank" class="btn btn-success">
+    Join Zoom Call
+</a>
+
+{% endblock %}

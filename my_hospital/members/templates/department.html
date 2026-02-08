@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="section_title text-center mb-5">
+        {% comment %} <img src="{% static 'assets/img/department/1.jpg' %}" alt="Departments" class="img-fluid mb-3" style="max-height: 150px;" onerror="this.style.display='none';"> {% endcomment %}
+        <h2>Our Departments</h2>
+        <p>Select a department to view available doctors and book an appointment</p>
+    </div>
+    
+    <div class="row">
+        {% if doctors_by_dept %}
+            {% for dept, doctors_list in doctors_by_dept.items %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">{{ dept }}</h4>
+                        <p class="card-text">
+                            <strong>{{ doctors_list|length }}</strong> doctor{{ doctors_list|length|pluralize }} available
+                        </p>
+                        <div class="mb-3">
+                            {% for doctor in doctors_list|slice:":3" %}
+                            <p class="mb-1 small">
+                                Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}
+                                {% if doctor.fee %}- ₹{{ doctor.fee }}{% endif %}
+                            </p>
+                            {% endfor %}
+                            {% if doctors_list|length > 3 %}
+                            <p class="text-muted small">+ {{ doctors_list|length|add:"-3" }} more</p>
+                            {% endif %}
+                        </div>
+                        {% if user.is_authenticated and user.patient %}
+                            <a href="{% url 'patient_book_appointment' %}?specialization={{ dept }}" class="btn btn-primary">Book Appointment</a>
+                        {% else %}
+                            <a href="{% url 'patient_login' %}" class="btn btn-outline-primary">Login to Book</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+          
+            {% for dept in departments %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">{{ dept }}</h4>
+                        <p class="card-text text-muted">No doctors available yet</p>
+                        {% if user.is_authenticated and user.patient %}
+                            <a href="{% url 'patient_book_appointment' %}?specialization={{ dept }}" class="btn btn-outline-primary">View Doctors</a>
+                        {% else %}
+                            <a href="{% url 'patient_login' %}" class="btn btn-outline-primary">Login to Book</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    
+    {% if not doctors_by_dept and not departments %}
+    <div class="alert alert-info text-center">
+        <p>No departments available. Please contact administrator.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

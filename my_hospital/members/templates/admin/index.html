@@ -1,0 +1,12 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{# Admin index overridden to include app dashboard content #}
+{% block content %}
+    {% include 'includes/admin_sidebar.html' %}
+
+    <div class="main-content admin-content">
+        <div class="alert alert-success">Custom Admin Dashboard override loaded ✅</div>
+        {% include 'includes/admin_dashboard.html' %}
+    </div>
+{% endblock %}

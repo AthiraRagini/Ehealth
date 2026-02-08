@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="hero-section mb-5" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% static 'assets/img/banner/banner.png' %}'); background-size: cover; background-position: center; padding: 100px 0; color: white; text-align: center;">
+    <div class="container">
+        <h1 class="display-4 mb-3">Welcome to My Hospital</h1>
+        <p class="lead mb-4">Your health, our priority. Quality healthcare services for you and your family.</p>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'patient_register' %}" class="btn btn-primary btn-lg me-2">Register Now</a>
+        <a href="{% url 'patient_login' %}" class="btn btn-outline-light btn-lg">Patient Login</a>
+        {% else %}
+        <a href="{% url 'patient_book_appointment' %}" class="btn btn-primary btn-lg">Book Appointment</a>
+          
+        {% endif %}
+    </div>
+</section>
+
+
+<section class="departments-section mb-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2>Our Departments</h2>
+            <p class="text-muted">Choose from our wide range of medical specialties</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/department/1.jpg' %}" alt="Eye Care" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3EEye Care%3C/text%3E%3C/svg%3E'">
+                        <h5>Eye Care</h5>
+                        <p class="text-muted small">Ophthalmology services</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/4.png' %}" alt="Skin Care" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3ESkin Care%3C/text%3E%3C/svg%3E'">
+                        <h5>Skin Care</h5>
+                        <p class="text-muted small">Dermatology services</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/2.png' %}" alt="Cardiology" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3ECardiology%3C/text%3E%3C/svg%3E'">
+                        <h5>Cardiology</h5>
+                        <p class="text-muted small">Heart care services</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/3.png' %}" alt="Neurology" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3ENeurology%3C/text%3E%3C/svg%3E'">
+                        <h5>Neurology</h5>
+                        <p class="text-muted small">Brain and nerve care</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/5.png' %}" alt="Orthopedics" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3EOrthopedics%3C/text%3E%3C/svg%3E'">
+                       <h5> Orthopedics</h5>
+                        <p class="text-muted small">Bone and joint care</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/6.png' %}" alt="Pediatrics" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3EPediatrics%3C/text%3E%3C/svg%3E'">
+                        <h5>Pediatrics</h5>
+                        <p class="text-muted small">Child healthcare</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/7.png' %}" alt="Dental" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3EDental%3C/text%3E%3C/svg%3E'">
+                        <h5>Dental</h5>
+                        <p class="text-muted small">Dental care services</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <img src="{% static 'assets/img/experts/9.png' %}" alt="General Medicine" class="img-fluid mb-3" style="max-height: 150px; width: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27150%27 height=%27150%27%3E%3Crect width=%27150%27 height=%27150%27 fill=%27%23e0e0e0%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27 fill=%27%23999%27%3EGeneral Medicine%3C/text%3E%3C/svg%3E'">
+                        <h5>General Medicine</h5>
+                        <p class="text-muted small">Primary healthcare</p>
+                        <a href="{% url 'department' %}" class="btn btn-sm btn-primary">View Doctors</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'department' %}" class="btn btn-primary btn-lg">View All Departments</a>
+        </div>
+    </div>
+</section>
+
+
+<section class="features-section mb-5" style="background-color: #f8f9fa; padding: 60px 0;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2>Why Choose Us</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <h5>Expert Doctors</h5>
+                    <p class="text-muted">Experienced and qualified medical professionals</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <h5>Quality Care</h5>
+                    <p class="text-muted">Best healthcare services with modern facilities</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <h5>24/7 Support</h5>
+                    <p class="text-muted">Round the clock medical assistance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero-section {
+    border-radius: 10px;
+    margin: 20px 0;
+}
+.card {
+     border-radius: 50px;
+    transition: transform 0.2s;
+    background-color: white
+    
+   
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 20px;
+}
+</style>
+{% endblock %}

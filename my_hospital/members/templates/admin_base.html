@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Poppins, sans-serif;
+            background: #f3f4f6;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #1f2937;
+            color: white;
+            position: fixed;
+            padding-top: 20px;
+        }
+        .sidebar h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 12px 22px;
+            color: #d1d5db;
+            font-size: 15px;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #374151;
+            color: #fff;
+            border-left: 3px solid #3b82f6;
+        }
+
+        /* Dropdown Styling */
+        .submenu {
+            display: none;
+            background: #2d3644;
+        }
+        .submenu a {
+            padding-left: 40px;
+            font-size: 14px;
+        }
+        .submenu.show {
+            display: block;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h3>Admin Panel</h3>
+
+    <a href="{% url 'admin_home' %}" class="{% if request.resolver_match.url_name == 'admin_home' %}active{% endif %}">
+        <i class="fa fa-tachometer me-2"></i> Dashboard
+    </a>
+
+    <!-- USERS DROPDOWN -->
+    <a id="usersMenu">
+        <i class="fa fa-users me-2"></i> Users
+        <i class="fa fa-chevron-down float-end"></i>
+    </a>
+
+    <div id="usersSubmenu" class="submenu
+        {% if request.resolver_match.url_name == 'admin_doctors' or request.resolver_match.url_name == 'admin_patients' %}
+            show
+        {% endif %}
+    ">
+        <a href="{% url 'admin_doctors' %}" class="{% if request.resolver_match.url_name == 'admin_doctors' %}active{% endif %}">
+            Doctors
+        </a>
+        <a href="{% url 'admin_patients' %}" class="{% if request.resolver_match.url_name == 'admin_patients' %}active{% endif %}">
+            Patients
+        </a>
+    </div>
+
+    <a href="{% url 'admin_appointments' %}" class="{% if request.resolver_match.url_name == 'admin_appointments' %}active{% endif %}">
+        <i class="fa fa-calendar me-2"></i> Appointments
+    </a>
+
+    <a href="{% url 'admin_payments' %}" class="{% if request.resolver_match.url_name == 'admin_payments' %}active{% endif %}">
+        <i class="fa fa-money me-2"></i> Payments
+    </a>
+
+    <a href="{% url 'logout' %}">
+        <i class="fa fa-sign-out me-2"></i> Logout
+    </a>
+</div>
+
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+
+<script>
+    document.getElementById("usersMenu").addEventListener("click", function() {
+        document.getElementById("usersSubmenu").classList.toggle("show");
+    });
+</script>
+
+</body>
+</html>

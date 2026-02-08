@@ -1,0 +1,23 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/admin.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+    <script src="{% static 'assets/js/admin.js' %}"></script>
+{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name"><a href="{% url 'admin:index' %}">{% trans "My Hospital Admin" %}</a></h1>
+{% endblock %}
+
+{% block content %}
+    
+    {% include 'includes/admin_sidebar.html' %}
+
+    <div class="main-content admin-content">
+        {{ block.super }}
+    </div>
+{% endblock %}

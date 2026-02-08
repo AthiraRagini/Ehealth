@@ -1,0 +1,160 @@
+<div class="text-center">
+    <h2 class="dashboard-title">Admin Dashboard</h2>
+    <p class="text-muted">Welcome, {{ user.username }}</p>
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'doctor_register' %}" class="btn btn-outline-primary btn-sm me-2"><i class="fa fa-user-md me-1"></i> Add Doctor</a>
+    <a href="{% url 'patient_register' %}" class="btn btn-outline-success btn-sm me-2"><i class="fa fa-user-plus me-1"></i> Add Patient</a>
+    <a href="{% url 'admin_appointments' %}" class="btn btn-outline-warning btn-sm"><i class="fa fa-calendar-plus me-1"></i> Appointments</a>
+</div>
+
+{% if admin_revenue_labels and admin_revenue_data %}
+    {{ admin_revenue_labels|json_script:"adminRevenueLabels" }}
+    {{ admin_revenue_data|json_script:"adminRevenueData" }}
+{% endif %}
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card stat-primary">
+            <div class="stat-icon bg-white text-primary"><i class="fa fa-users"></i></div>
+            <div class="stat-meta">
+                <div class="stat-value"><span class="count" data-target="{{ admin_total_users|default:total_users }}">{{ admin_total_users|default:total_users }}</span></div>
+                <div class="stat-label">Total Users</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card stat-success">
+            <div class="stat-icon bg-white text-success"><i class="fa fa-user-injured"></i></div>
+            <div class="stat-meta">
+                <div class="stat-value"><span class="count" data-target="{{ admin_total_patients|default:total_patients }}">{{ admin_total_patients|default:total_patients }}</span></div>
+                <div class="stat-label">Total Patients</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card stat-info">
+            <div class="stat-icon bg-white text-info"><i class="fa fa-user-md"></i></div>
+            <div class="stat-meta">
+                <div class="stat-value"><span class="count" data-target="{{ admin_total_doctors|default:total_doctors }}">{{ admin_total_doctors|default:total_doctors }}</span></div>
+                <div class="stat-label">Total Doctors</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card stat-warning">
+            <div class="stat-icon bg-white text-warning"><i class="fa fa-calendar-check"></i></div>
+            <div class="stat-meta">
+                <div class="stat-value"><span class="count" data-target="{{ admin_total_appointments|default:total_appointments }}">{{ admin_total_appointments|default:total_appointments }}</span></div>
+                <div class="stat-label">Appointments</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-4 align-items-stretch">
+    <div class="col-md-6">
+        <div class="stat-card stat-primary recent-card" style="background: linear-gradient(135deg,lightblue,lightblue);">
+            <div class="stat-icon bg-white text-danger"><i class="fa fa-rupee-sign"></i></div>
+            <div class="stat-meta">
+                <div class="stat-value">₹{{ admin_total_revenue|default:total_revenue }}</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="stat-card stat-info recent-card" style="background: linear-gradient(135deg,lightgreen,lightgreen);">
+            <div class="stat-icon bg-white text-secondary"><i class="fa fa-receipt"></i></div>
+            <div class="stat-meta">
+                <div class="stat-value">{{ admin_total_payments|default:total_payments }}</div>
+                <div class="stat-label">Total Payments</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card mb-4 recent-card">
+    <div class="card-header d-flex justify-content-between align-items-center"><h4 class="mb-0">Recent Appointments</h4><small class="text-muted">Showing latest 10</small></div>
+    <div class="card-body">
+        {% if recent_appointments %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in recent_appointments %}
+                    <tr>
+                        <td>{{ appointment.patient.user.username }}</td>
+                        <td>Dr. {{ appointment.doctor.user.username }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>
+                            <span class="badge {% if appointment.status == 'confirmed' %}bg-success{% elif appointment.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ appointment.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No appointments found.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+
+<div class="card mb-5 recent-card">
+    <div class="card-header d-flex justify-content-between align-items-center"><h4 class="mb-0">Recent Payments</h4><small class="text-muted">Showing latest 10</small></div>
+    <div class="card-body">
+        {% if recent_payments %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Doctor</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in recent_payments %}
+                    <tr>
+                        <td>{{ payment.patient.user.username }}</td>
+                        <td>Dr. {{ payment.doctor.user.username }}</td>
+                        <td>₹{{ payment.amount }}</td>
+                        <td>
+                            <span class="badge {% if payment.status == 'paid' %}bg-success{% else %}bg-warning{% endif %}">
+                                {{ payment.status }}
+                            </span>
+                        </td>
+                        <td>{{ payment.payment_date }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">No payments available.</p>
+        {% endif %}
+
+    </div>
+</div>
